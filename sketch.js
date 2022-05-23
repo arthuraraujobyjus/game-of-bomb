@@ -86,6 +86,7 @@ guarana();
 
 for(var i=0;i<bigmac.length;i++){
   coca(bigmac[i],i);
+  pepsi(i);
 }
 }
 function keyReleased(){
@@ -102,6 +103,9 @@ bigmac.push(bala)
 function coca(bala,i){
   if(bala){
     bala.mostrar();
+    if(bala.corpo.position.x>=width||bala.corpo.position.y>=height-50){
+      bala.naomostrar(i);
+    }
   }
 }
 function guarana(){
@@ -123,4 +127,17 @@ for(var i=0;i<mutiversso.length;i++){
     mutiversso.push(piratasdocaribe)
 
   }
+}
+function pepsi(index){
+for(var i=0;i<mutiversso.length;i++){
+  if(bigmac[index]!==undefined&&mutiversso[i]!==undefined){
+    var avatar=Matter.SAT.collides(bigmac[index].corpo,mutiversso[i].corpo);
+    if(avatar.collided){
+mutiversso[i].naomostrar(i);
+Matter.World.remove(world,bigmac[index].corpo);
+delete bigmac[index];
+    }
+  }
+}
+
 }

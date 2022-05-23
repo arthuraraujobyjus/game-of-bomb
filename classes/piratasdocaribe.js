@@ -19,4 +19,11 @@ class Piratasdocaribe {
         image(this.imagem, 0, this.piratasPos, this.lar, this.alt);
         pop();
     }
+    naomostrar(index){
+        setTimeout(()=>{
+            Matter.World.remove(world,mutiversso[index].corpo);
+            delete mutiversso[index];
+        },2000)
+
+    }
 }
