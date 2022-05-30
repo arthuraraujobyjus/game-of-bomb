@@ -7,8 +7,15 @@ class Canhao {
         this.corpo = Bodies.circle(posX, posY, this.r, options);
         this.imagem = loadImage("./assets/cannonball.png");
         this.batatafrita=[];
+        this.speed = 0.05;
+        this.animacao = [this.imagem];
+        this.deupt = false;
         World.add(world,this.corpo);
     }
+    animar(){
+        this.speed += 0.05;
+    }
+
 receba(){
     var novoAng = witer.ang - 28;
     novoAng *= (3.14/180);
@@ -20,11 +27,12 @@ receba(){
 }
     mostrar(){
         var pos = this.corpo.position;
+        var index = floor(this.speed % this.animacao.length);
         push();
         imageMode(CENTER);
-        image(this.imagem, pos.x, pos.y, this.r, this.r);
+        image(this.animacao[index], pos.x, pos.y, this.r, this.r);
         pop();
-        if(this.corpo.velocity.x>0&&pos.x>10){
+        if(this.corpo.velocity.x>0&&pos.x>10&&!this.deupt){
             var position=[pos.x,pos.y]
          this.batatafrita.push(position);
         }
@@ -33,7 +41,11 @@ receba(){
         }
     }
     naomostrar(index){
+        this.deupt = true;
         Matter.Body.setVelocity(this.corpo,{x:0,y:0});
+        this.animacao = canonfail;
+        this.speed = 0.05;
+        this.r = 150;
         setTimeout(()=>{
             Matter.World.remove(world,this.corpo);
             delete bigmac[index];

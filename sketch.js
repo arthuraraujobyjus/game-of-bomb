@@ -39,10 +39,22 @@ var bala;
 var bigmac=[];
 var piratasdocaribe;
 var mutiversso=[];
+var piratasAnimation = [];
+var piratasDados, piratasSpritesheet;
+var animando = [];
+var afundandoNA, dadosSpritesheet; 
+var canonfail = [];
+var balldados, ballSpritesheet;
 
 function preload() {
   creeper = loadImage("./assets/background.gif");
   obsidian = loadImage("./assets/tower.png");
+  piratasDados = loadJSON("./assets/boat/boat.json");
+  piratasSpritesheet = loadImage("./assets/boat/boat.png");
+  afundandoNA = loadJSON("./assets/boat/brokenBoat.json");
+  dadosSpritesheet = loadImage("./assets/boat/brokenBoat.png");
+  balldados = loadJSON("./assets/waterSplash/waterSplash.json");
+  ballSpritesheet = ("./assets/waterSplash/waterSplash.png");
 }
 
 function setup() {
@@ -61,11 +73,30 @@ function setup() {
  villager = Bodies.rectangle(160, 350, 160, 310, options);
  World.add(world, villager);
  angleMode(DEGREES)
-ang=20;
-witer=new Golem(180,110,130,100,ang);
+ ang=20;
+ witer=new Golem(180,110,130,100,ang);
 
+var piratasFrames = piratasDados.frames;
 
- 
+for(var i = 0; i < piratasFrames.length; i++){
+  var pos = piratasFrames[i].position;
+  var img = piratasSpritesheet.get(pos.x, pos.y, pos.w, pos.h);
+  piratasAnimation.push(img);
+}
+var afundandoFrames = afundandoNA.frames;
+
+for(var i = 0; i < afundandoFrames.length; i++){
+  var pos = afundandoFrames[i].position;
+  var img = dadosSpritesheet.get(pos.x, pos.y, pos.w, pos.h);
+  animando.push(img);
+}
+var ballFrames = balldados.frames;
+
+for(var i = 0; i < ballFrames.length; i++){
+  var pos = ballFrames[i].position;
+  var img = ballSpritesheet.get(pos.x, pos.y, pos.w, pos.h);
+  canonfail.push(img);
+}
 }
 
 function draw() {
@@ -103,6 +134,7 @@ bigmac.push(bala)
 function coca(bala,i){
   if(bala){
     bala.mostrar();
+    bala.animar();
     if(bala.corpo.position.x>=width||bala.corpo.position.y>=height-50){
       bala.naomostrar(i);
     }
@@ -113,17 +145,18 @@ function guarana(){
   if(mutiversso[mutiversso.length-1]===undefined||mutiversso[mutiversso.length-1].corpo.position.x<width-300){
     var positions=[-40,-60,-70,-20];
     var position=random(positions);
-    var piratasdocaribe = new Piratasdocaribe(width, height-60, 170, 170, position);
+    var piratasdocaribe = new Piratasdocaribe(width, height-60, 170, 170, position, piratasAnimation);
     mutiversso.push(piratasdocaribe)
   }
 for(var i=0;i<mutiversso.length;i++){
   if(mutiversso[i]){
   Matter.Body.setVelocity(mutiversso[i].corpo, {x:-0.9,y:0});
   mutiversso[i].mostrar(); 
+  mutiversso[i].animar();
    }  
 }
   }else{
-    var piratasdocaribe = new Piratasdocaribe(width, height-60, 170, 170, -60);
+    var piratasdocaribe = new Piratasdocaribe(width, height-60, 170, 170, -60, piratasAnimation);
     mutiversso.push(piratasdocaribe)
 
   }
