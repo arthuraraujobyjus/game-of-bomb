@@ -45,6 +45,13 @@ var animando = [];
 var afundandoNA, dadosSpritesheet; 
 var canonfail = [];
 var balldados, ballSpritesheet;
+var sushi = false;
+var blackpearl;
+var shot;
+var coringa;
+var splash;
+var risos = false;
+var placar = 0;
 
 function preload() {
   creeper = loadImage("./assets/background.gif");
@@ -54,7 +61,11 @@ function preload() {
   afundandoNA = loadJSON("./assets/boat/brokenBoat.json");
   dadosSpritesheet = loadImage("./assets/boat/brokenBoat.png");
   balldados = loadJSON("./assets/waterSplash/waterSplash.json");
-  ballSpritesheet = ("./assets/waterSplash/waterSplash.png");
+  ballSpritesheet = loadImage("./assets/waterSplash/waterSplash.png");
+  blackpearl = loadSound("./assets/background_music.mp3");
+  shot = loadSound("./assets/cannon_explosion.mp3");
+  coringa = loadSound("./assets/pirate_laugh.mp3");
+  splash = loadSound("./assets/cannon_water.mp3");
 }
 
 function setup() {
@@ -103,6 +114,14 @@ function draw() {
   background(189);
   image(creeper, 0, 0, 1200, 600);
 
+if(!blackpearl.isPlaying()){
+  blackpearl.play();
+  blackpearl.setVolume(0.05);
+}
+
+  fill("DarkSlateBlue")
+  textSize(40);
+  text(placar,1100,50);
 
   Engine.update(engine);
  
@@ -122,6 +141,8 @@ for(var i=0;i<bigmac.length;i++){
 }
 function keyReleased(){
   if(keyCode===DOWN_ARROW){
+    shot.play();
+    shot.setVolume(0.05);
     bigmac[bigmac.length-1].receba();
   }
 }
@@ -137,6 +158,11 @@ function coca(bala,i){
     bala.animar();
     if(bala.corpo.position.x>=width||bala.corpo.position.y>=height-50){
       bala.naomostrar(i);
+      if(bala.deupt===true){
+        splash.playMode("untilDone");
+        splash.play();
+        splash.setVolume(0.05);
+      }
     }
   }
 }
@@ -153,6 +179,16 @@ for(var i=0;i<mutiversso.length;i++){
   Matter.Body.setVelocity(mutiversso[i].corpo, {x:-0.9,y:0});
   mutiversso[i].mostrar(); 
   mutiversso[i].animar();
+  var vecna = Matter.SAT.collides(villager, mutiversso[i].corpo);
+  if(vecna.collided && !mutiversso[i].caiu){
+    if(!risos&&!coringa.isPlaying()){
+      coringa.play();
+      coringa.setVolume(0.05);
+      risos = true;
+    }
+    sushi = true;
+    hashi();
+  }
    }  
 }
   }else{
@@ -166,6 +202,7 @@ for(var i=0;i<mutiversso.length;i++){
   if(bigmac[index]!==undefined&&mutiversso[i]!==undefined){
     var avatar=Matter.SAT.collides(bigmac[index].corpo,mutiversso[i].corpo);
     if(avatar.collided){
+    placar+=1;
 mutiversso[i].naomostrar(i);
 Matter.World.remove(world,bigmac[index].corpo);
 delete bigmac[index];
@@ -173,4 +210,20 @@ delete bigmac[index];
   }
 }
 
+}
+
+function hashi(){
+  swal({
+    title:"Fim de jogo!",
+    text: "Obrigado por jogar!",
+    imageUrl: "https://raw.githubusercontent.com/whitehatjr/PiratesInvasion/main/assets/boat.png",
+    imageSize: "150x150",
+    confirmButtonText: "Jogar novamente!"
+  },
+    function(botaoPressionado){
+      if(botaoPressionado){
+        location.reload();
+      }
+    }
+  )
 }

@@ -26,13 +26,16 @@ receba(){
     Matter.Body.setVelocity(this.corpo,{x:velocidade.x * (180/3.14),y:velocidade.y * (180/3.14)});
 }
     mostrar(){
+        var angle = this.corpo.angle;
         var pos = this.corpo.position;
         var index = floor(this.speed % this.animacao.length);
         push();
+        translate(pos.x, pos.y);
+        rotate(angle);
         imageMode(CENTER);
-        image(this.animacao[index], pos.x, pos.y, this.r, this.r);
+        image(this.animacao[index], 0, 0, this.r, this.r);
         pop();
-        if(this.corpo.velocity.x>0&&pos.x>10&&!this.deupt){
+        if(this.corpo.velocity.x>0 && pos.x>10 && !this.deupt){
             var position=[pos.x,pos.y]
          this.batatafrita.push(position);
         }
